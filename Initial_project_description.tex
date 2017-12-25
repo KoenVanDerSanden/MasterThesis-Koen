@@ -1,0 +1,127 @@
+\documentclass[a4paper,twoside]{revtex4-1}
+\usepackage[font=small,format=plain,labelfont=bf,up,textfont=bf,up]{caption}
+\usepackage[margin=2.5cm]{geometry} % change margin
+\usepackage{subfigure}  %subfigures
+\usepackage{graphicx}	%include graphics
+\usepackage{fullpage}	
+\usepackage{courier}     %\ttfamily
+\usepackage{amsmath}	%Mathematics
+\usepackage{amssymb}	%the R of real number, C of complex, etc.
+\usepackage{float}		%To place figures where I want them
+\usepackage{braket}		%The Quantum Mechanical Dirac notation: | > , < | , < > 
+\usepackage{parskip}		
+%\usepackage[usenames,dvipsnames]{color} 
+ 	
+\usepackage[dvipsnames]{xcolor}		 %colored text
+\usepackage{sidecap}		%Figure with a caption on the side
+\usepackage{chngcntr}         %To adjust numbering of sections without having to use Chapters
+
+% BibTeX related: 
+
+%\usepackage{natbib}
+%\bibliographystyle{aip}
+
+% To make Bibliography appear in Table of Contents
+%, but not the List of Formula's, List of Tables and the ToC itself.
+\usepackage[nottoc,notlof,notlot]{tocbibind} 
+
+
+\usepackage{hyperref} % To make hyperlinks of all references. (NOTE:: Must be last \usepackage and BEFORE any other command (besides \documentclass) )
+\usepackage{nicefrac}			%Nice "1/2" notation for fractions  
+\usepackage[space]{grffile}
+\usepackage{mathtools}
+
+
+
+% Symbols used in model:
+% Rate's (allways comes in handy)
+\newcommand{\rate }[1]{\ensuremath{k_{\text{#1}}} }
+%% Probabilities
+\newcommand{\PRloop}{\ensuremath{P_{\text{R-loop}}}}
+\newcommand{\PPAM}{\ensuremath{P_{\text{PAM}}}}
+\newcommand{\Pclv}{\ensuremath{P_{\text{clv}}}}
+\newcommand{\Pconf}{\ensuremath{P_{\text{conf}}}}
+\newcommand{\pclv}{\ensuremath{p_{\text{clv}}}}
+\newcommand{\pmax}{\ensuremath{p_{\text{max}}}}
+%% Energies
+\newcommand{\T}{\ensuremath{\Delta T  }}
+\newcommand{\TRloop}{\ensuremath{\Delta T_{\rm{R}}  }}
+\newcommand{\F}{\ensuremath{\Delta F  }}
+%% (Mismatch) positions
+\newcommand{\nseed}{\ensuremath{ n_{\rm{seed}} } }
+\newcommand{\nseedEQ}{\ensuremath{ n_{\rm{seed}}^{\rm{EQ}} } }
+\newcommand{\npair}{\ensuremath{ n_{\rm{pair}}} } 
+%% Parameters
+\newcommand{\DeltaC}{\ensuremath{\Delta_{\text{C}}  }}
+\newcommand{\DeltaI}{\ensuremath{\Delta_{\text{I}}  }}
+\newcommand{\Deltaclv}{\ensuremath{\Delta_{\text{clv}}  }}
+\newcommand{\DeltaPAM}{\ensuremath{\Delta_{\text{PAM}}  }}
+\newcommand{\deltaC}{\ensuremath{\delta_{\text{C}}  }}
+\newcommand{\deltaI}{\ensuremath{\delta_{\text{I}}  }}
+\newcommand{\deltaclv}{\ensuremath{\delta_{\text{clv}}  }}
+\newcommand{\deltaPAM}{\ensuremath{\delta_{\text{PAM}}  }}
+\newcommand{\w}{\ensuremath{w}}
+
+%% 
+\newcommand{\RGN}{\ensuremath{[\rm{RGN}]}}
+
+
+\begin{document}
+
+
+
+
+\begin{center}
+{\bf \Large {Predicting genome-wide binding profiles of dCas9 (and other catalytically dead RNA guided nucleases)}}
+\vspace{10pt} \\ 
+\end{center}
+
+
+
+\subsection{project description:} 
+Currently, we have modelled the probability to interfere with/ cleave a selected target sequence ($\Pclv(s|g)$). Furthermore, we're working on a pipeline for predicting genome-wide cleavage profiles of which we've got essential parts of the code/algorithm working. Catalytically dead nucleases (most notably dCas9) are emerging as popular tools for site-specific labelling. Not only have experiments have shown that binding affinities of catalytically dead nucleases (dCas9) don't nessacarilly report on the cleavage activity of its active counterpart (Cas9), but the dCas9 system in itself is a useful tool for site-specific labelling (think fluorensent imaging or desease marker detection).
+Therefore, it is worth-while making a separate prediction of  binding affinities.  
+\\ \\ 
+\subsection{Primary Research questions/goals:} 
+\begin{enumerate}
+\item What is the proper measure of binding affinity? 
+\item Construct Algorithm to perform genome-wide predictions
+\item What are the suitable set of features (model parameters) to train the model with? 
+\item Test against genome-wide data
+\item Compare against existing algorithms 
+\end{enumerate}
+
+
+\subsection{Secondary research questions to keep in mind:}
+\begin{enumerate}
+\item Since any experiment takes a finite amount of time: how long should an experiment be to reach equillibrium needed for a correct measure of $K_D$? 
+\item Can we relate measurements of the binding affinity to those of the cleavage activity? 
+\item Can we do the opposite?  
+\end{enumerate}
+
+
+\subsection{Where to start from?}
+\textit{The initial attack plan will be to mimic the steps taken towards the prediction of the cleavage activity.}
+\begin{enumerate}
+\item .Reading Literature: The first time I am actually stressing this for a student project. \\
+$\rightarrow$ Experimental papers that provide training and testing data \\
+$\rightarrow$ Other prediction algorithms.  
+\item  Data cleaning part I: Traning data \\
+$\rightarrow$ Boyle et al. : Large library for dCas9 \\
+$\rightarrow$ Finkelstein et al. : Large library for Cascade (not sure if we should start with this, but still) \\
+$\rightarrow$ Josephs et al. : Single-molecule AFM studies on dCas9 
+\item Data cleaning part II: Testing data (genome-wide binding measured) \\
+$\rightarrow$ Wu, Sharp et al. : ChiP-seq data dCas9 \\
+$\rightarrow$ Kuscu, Adli et al. : ChiP-seq data dCas9 \\
+$\rightarrow$ O'Greene et al. : ChiP-seq data dCas9 
+\item Time-Dependency: Simulate time-dependent occupancies.\\
+$\rightarrow$ Gives us a feeling for what model parameters set the equilibration time.\\
+$\rightarrow$ By using an intermediate distribution as input for the genome-wide prediction, do they improve/worsen?
+\item Anothony Birny (CD-lab) has send us his sequence he will be labelling with flouresenty labelled dCas9. It has a repeated motif in it, which provides us a convinient/visual feedback for binding profiles.
+
+ 
+\end{enumerate}
+
+
+
+\end{document}
