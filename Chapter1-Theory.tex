@@ -1,0 +1,125 @@
+\chapter{Chapter 1 - Theory}
+
+In this chapter we will discuss the general model used to predict binding and cleavage. We will start by describing the cleavage model as described in [SOURCE]. However instead of calculating the probability to cleave a sequence we will calculate the probability to bind to a certain sequence.
+
+\section{General Model}
+
+The model from [SOURCE] is quite simple at its core. Cas9 binds to the DNA in essentially two ways. One section forms bonds between the target DNA and RNA attached to the protein called 'guide RNA' or gRNA for short. The gRNA has a length of twenty bases. The second section forms 'bonds' between the target DNA and the protein itself, this section is called the 'protospacer adjacent motif' or PAM for short. Once everything is bound, the PAM and all twenty bases in the gRNA, active Cas9 is able to cleave the DNA.
+
+%TODO [IMAGE OF CAS9 BINDING - CARTOON?]
+
+The model used to predict binding and cleavage is analogous to a zipper. In a zipper there are separate teeth that get locked together one after another when the zipper is tightened. In a similar way the teeth let loose one set after another when the zipper is loosened. Analogous when the DNA and Cas9 bind to each other first the PAM binds, then the first base pair of the gRNA, then the second base pair, then the third, etcetera. This continues until all twenty bases are bound to each other and only then Cas9 can cleave. Not only is the one-by-one binding of the bases similar to the one-by-one interlocking teeth of a zipper, the entire process is also reversible like a zipper. The bound bases can also one-by-one unbind from each other just like the teeth of a zipper can be separated again. The only difference here is that once the DNA is cleaved, the process can not be reversed.
+
+With this zipper model in mind we can describe the binding of Cas9 to the DNA as a number of distinct states. The first state in our model is simply unbound Cas9; the DNA and the enzyme are separate. This is similar to a zipper which is entirely separated. The second state in our model is the one where the PAM is bound, similar to attaching the very first part of the zipper; no teeth are interlocked yet but the first connection is made and the two strands are attached to each other. After that we have twenty states corresponding to the binding of each of the base pairs, similar to a zipper which has tweny pairs of teeth. Finally we have the very last state where the Cas9 cleaves the target DNA, which is a special state since it is irreversible.
+
+%TODO [INSERT IMAGE OF DISTINCT STATES - MAYBE ZIPPER ANALOGY?]
+
+A well-functioning zipper is similar to the actual target of a Cas9 enzyme, called the on-target. The start of the DNA sequence of the on-target fits the PAM of Cas9 and every base on the DNA perfectly corresponds to its complement on the gRNA. An off-target however is similar to a zipper with a broken tooth somewhere along the way. Everything up to the broken tooth is similar to a well-functioning zipper but it is hard to pull the zipper over the broken tooth since it will not interlock correctly with the tooth on the other strand. However once the zipper is pulled over the broken tooth it is again very easy to tighten the rest of the zipper. This broken tooth is a mismatch on the target DNA. At first Cas9 does not know about the mismatch and will bind to the off-target but then somewhere along the way it will hit the mismatch. If it makes it over the mismatch it is then easy to continue further and eventually cleave the DNA, but if the mismatch is hard to get over the Cas9 can also simply unbind from that particular DNA sequence, since the binding process is reversible.
+
+This zipper image tells us how to think of Cas9 binding and cleavage but it does not yet allow us to predict which DNA sequences will be cleaved. To make that prediction we prescribe every state with a certain energy. We know that processes always tend to the configuration or state with the lowest possible energy. For now we will not worry about what the precise value of this energy is but we can assume certain things from what we know about Cas9:
+
+\begin{enumerate}
+\item The solution state has a certain energy associated with it, but since all energy changes are relative we can set the solution energy to any value we want. Therefore only increases and decreases in energy matter.
+\item A sequence with a matching PAM is more likely to cleave than a non-matching PAM. Therefore a matching PAM has a lower energy than a non-matching PAM.
+\item Matching bases increase the likelihood of cleaving the DNA, therefore a matching base must be an energy decrease.
+\item Non-matching bases decrease the likelihood of cleaving the DNA, therefore a mismatch must be an energy increase.
+\item The process of binding one base pair involves several things. First the DNA pair must be separated, then the DNA base must turn to the RNA base and then the RNA and DNA base must bind to each other. The unbinding of the DNA base pair and the turning of the DNA base will at first increase the energy of the state. This is the activation energy.
+\end{enumerate}
+
+These things tell us that there are three parameters in the minimal model that we have tot take into account: $\Delta C, \Delta I$ and $\Delta PAM$, the energy gain from a match, the energy penalty from a mismatch and the energy gain from the PAM respectively. From these assumptions we can draw some general energy landscapes.
+
+%TODO [ENERGY LANDSCAPE IMAGE]
+
+At this point we know that Cas9 behaves as a sort of zipper and each state has an associated energy. It is also known that nature tends towards the lowest energy state. From this it is clear that some sequences will be cleaved; the ones with a low final energy, and some will not be cleaved; the ones with a high final energy. We now want to quantify these initial conclusions.
+
+From Kramers rate theory [SOURCE] we know:
+
+\begin{equation}
+k_f(i) = k_0 \exp{(F_i-T_i)},
+\end{equation}
+\begin{equation}
+k_b(i) = k_0 \exp{(F_i-T_{i-1})},
+\end{equation}
+
+where $k_f$ and $k_b$ are the forward and backward rate respectively. They depend linearly on a certain attempt rate $k_0$ and exponentially on the free energy of state $i$ and the transition energy away from state $i$. The free energy of state $i$ is $F_i$, the transition energy from state $i$ to state $i+1$ is $T_i$ and the transition energy from state $i$ to state $i-1$ is $T_{i-1}$. Our system can then be pictured schematically as in figure %TODO ref
+
+%TODO [Schematic of system - energy states + rates]
+
+This couples the rates to move between states to the energies associated with those states. Using this we can say something about the probability to cleave and/or bind certain sequences. In this thesis we will focus on the binding instead of the cleaving, see [SOURCE] for a discussion on cleavage.
+
+The first step in using this model to determine whether a specific sequence will be bound by Cas9 is to establish what we will classify as 'bound'. One option is to classify every not-unbound state as bound, in other words: as long as Cas9 is connected to the DNA, albeit only the PAM, we will classify it as bound. Another option is to only classify a Cas9 as bound when it has a certain amount of bases of the gRNA bound. A logical choice would be to classify only Cas9 as bound if the entire gRNA is bound. A third option would be to classify Cas9 as bound when it is likelier to fully bind the gRNA than to unbind. All choices could be justified, however the choice has to correspond to the measurement that is done in the data which will eventually be used to fit the parameters in the model.
+
+
+\subsection{Equilibrium}
+
+No matter which definition of 'bound Cas9' we pick we have several options to calculate the fraction of bound Cas9. One simple way to calculate the fraction of bound Cas9 is to assume that the entire system is in equilibrium. If the system is in equilibrium and there are no exclusion effects then we can use boltzmann statistics to determine the fraction of Cas9 in each available state by only knowing the energy of each state. The probability to be in a single state is as follows:
+
+\begin{equation}
+P_i = \frac{\exp{(-E_i)}}{\sum_{i=0}^{N}\exp{(-E_i)}},
+\end{equation}
+
+where N is the total number of states available and $E_i$ is the energy of state $i$. Let us now take the example where every state is considered bound except the solution, or unbound state. Then the probability of being bound ($P_b$) in equilibrium is:
+
+\begin{equation}
+P_b = \frac{\sum_{i=1}^{N}\exp{(-E_i)}}{\sum_{i=0}^{N}\exp{(-E_i)}},
+\end{equation}
+
+where we have set state 0 to be the solution state.
+
+\subsection{Time dependent}
+
+%TODO Some things might be repeats here vvvvvvvv
+
+When the system is not in equilibrium a time dependency is introduced which makes the problem significantly more difficult. As far as we know there is no exact solution to the problem when it is not in equilibrium, however we can calculate the solution numerically. To do this we solve the master equation numerically. As with the minimal model we assume that the entire system has $22$ different states (for a gRNA with 20 bases): the unbound state, the PAM bound state and one state for each subsequent base pair. Each state can transition to the next or previous state only with a certain rate for each transition. Schematically this can be represented as in figure \ref{fig:mastereqn_schematic}. Each circle in this diagram represents a state of the system and each arrow represents a forward or a backward rate to go from a state to another.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.35]{images/MasterEqnFlow}
+\label{fig:mastereqn_schematic}
+\caption{A schematic representation of the system.}
+\end{center}
+\end{figure}
+
+We can say that a particular dCas9 enzyme has a probability to be in a specific state $P_i$ at a specific time  $t$. If we look at the probability $P_i(t)$ to be in the state $i$ at a slightly later time $t+dt$ then the probability has changed to
+
+\begin{equation}
+P_i(t+dt) = P_i(t) - P_i(t)\cdot (\lambda_i + \mu_i)\cdot dt + \lambda_{i-1}P_{i-1}(t)\cdot dt + \mu_{i+1}P_{i+1}(t)\cdot dt,
+\end{equation}
+
+which holds as long as $dt$ is small enough to only allow a single transition. Here $\lambda_i$ is the forward rate from state $i$ to state $i+1$ and $\mu_i$ is the backward rate from state $i$ to state $i-1$. Rewriting this equation and letting $dt \rightarrow 0$ we get
+
+\begin{equation}
+\label{eq:dpdtmasteri}
+\frac{\partial P_i(t)}{\partial t} = (-\lambda_i - \mu_i)P_i(t) + \lambda_{i-1}P_{i-1}(t) + \mu_{i+1}P_{i+1}(t),
+\end{equation}
+
+for $i \in [-1,N]$. Where we call state $-1$ the free state, state $0$ the state with only the PAM bound and states $1..20$ the states with bases $1..20$ bound. We can write equation \ref{eq:dpdtmasteri} in matrix form
+
+\begin{equation}
+\label{eq:mastermatrix}
+\frac{\partial \vec{P}(t)}{\partial t} = M\cdot \vec{P}(t),
+\end{equation}
+
+where $M$ is the transition matrix containing the forward and backward rates. One can easily solve this equation
+
+\begin{equation}
+\vec{P(t)} = exp(M\cdot t) \cdot \vec{P}(0).
+\end{equation}
+
+This gives the probability of a specific molecule to be in each state at a time $t$. In other words, this is the fraction of molecules in each state at a time $t$.
+
+For the specific rates contained in the matrix we have assumed that each forward rate is constant and the same: $k_f(i) = k_f(i+1)$ for all $i \neq -1$. This is a reasonable assumption since physically the molecules only feels the interaction of the forward barrier for its forward rate. This energy barrier is determined by the energy it takes to break up the DNA-DNA bond and, approximating all DNA bonds as equal, this is always the same. The only forward rate we have not assumed the same is that from solution to the first (PAM) bound state, since this can vary with concentration of dCas9.
+Following Kramers rate theory the forward and backward rates are given by
+
+\begin{align*}
+k_f(i) &= k_0 \cdot exp(F_i - T_i) \\
+k_b(i) &= k_0 \cdot exp(F_i - T_{i-1}),
+\end{align*}
+
+With $F_i$ the free energy of state $i$ and $T_i$ the transition energy from state $i$ to state $i+1$. Therefore
+
+\begin{equation}
+k_b(i) = k_f(i-1) \cdot exp(F_{i}-F_{i-1}).
+\end{equation}
+
+With this it is possible to calculate the occupancy of each state over time and therefore the predicted on- and off-rates. As \cite{PNAS} we will call every state other than the unbound state a bound state.
