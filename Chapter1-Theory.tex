@@ -35,9 +35,11 @@ At this point we know that Cas9 behaves as a sort of zipper and each state has a
 From Kramers rate theory [SOURCE] we know:
 
 \begin{equation}
+\label{eq:Kramer1}
 k_f(i) = k_0 \exp{(F_i-T_i)},
 \end{equation}
 \begin{equation}
+\label{eq:Kramer2}
 k_b(i) = k_0 \exp{(F_i-T_{i-1})},
 \end{equation}
 
@@ -109,7 +111,7 @@ where $M$ is the transition matrix containing the forward and backward rates. On
 This gives the probability of a specific molecule to be in each state at a time $t$. In other words, this is the fraction of molecules in each state at a time $t$.
 
 For the specific rates contained in the matrix we have assumed that each forward rate is constant and the same: $k_f(i) = k_f(i+1)$ for all $i \neq -1$. This is a reasonable assumption since physically the molecules only feels the interaction of the forward barrier for its forward rate. This energy barrier is determined by the energy it takes to break up the DNA-DNA bond and, approximating all DNA bonds as equal, this is always the same. The only forward rate we have not assumed the same is that from solution to the first (PAM) bound state, since this can vary with concentration of dCas9.
-Following Kramers rate theory the forward and backward rates are given by
+Following Kramers rate theory (equations \ref{eq:Kramer1} and \ref{eq:Kramer2}) the forward and backward rates are given by
 
 \begin{align*}
 k_f(i) &= k_0 \cdot exp(F_i - T_i) \\
