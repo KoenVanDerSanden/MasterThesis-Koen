@@ -162,38 +162,66 @@ The simpelest model of all is what will be called 'the minimal model'. This mode
 The minimal model encompasses everything described in section \ref{seq:generalmodel}. To predict the binding probability of any sequence we only have one question left to answer: 'When is a Cas9 enzyme bound?' This may seem like a silly question but it is important to agree on what constitutes binding. One option is to only mark Cas9 as bound when it reached the final state in the system, meaning a fully formed R-loop. Another option is to mark Cas9 bound when the entire seed-region is bound. A third proposition could be to mark Cas9 as bound when it is simply not unbound, so every state except solution would be a 'bound state'. None of these definitions is necessarily better than any other but it is important to be consistent, even more so between theory and experiment. Therefore we will consider all states bound except the solution state. Not only does this make intuitive sense, it is also the same quantity that is measured in several experiments like \citep{PNAS} and [SOURCE]. By defining binding like this the minimal model has several features that depend mostly on the energy landscape, which is determined by the free energy parameters.
 
 \subsection{Energy landscape}
-The energy landscape of the R-loop determines the fraction of the dCas9 that will be bound in equilibrium and also determines, to an extent, how fast binding happens. As discussed before, the minimal model has three free energy parameters: one for a matching PAM, one for a matching base pair and one for a mismatching base pair. When we refer to an energy landscape we refer to the entire landscape, so for all possible states, that is predicted by these three parameters. An example landscape is shown in figure \ref{fig:examplelandscapeminmodel}. %TODO
+The energy landscape of the R-loop determines the fraction of the dCas9 that will be bound in equilibrium and also determines, to an extent, how fast binding happens. As discussed before, the minimal model has three free energy parameters: one for a matching PAM, one for a matching base pair and one for a mismatching base pair. When we refer to an energy landscape we refer to the entire landscape, so for all possible states, that is predicted by these three parameters. An example landscape is shown in figure \ref{fig:examplelandscapeminmodel}.
 
-%TODO insert example landscape
-%\label{fig:examplelandscapeminmodel}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{images/examplelandscapeminmodel}
+\label{fig:examplelandscapeminmodel}
+\caption{An example of a possible energy landscape in the minimal model. In this landscape two mismatches occur at positions five and seventeen.}
+\end{center}
+\end{figure}
 
 By looking at the energy landscape it is possible to predict quite a lot about the behavior of the system. We will note several of these features and describe them by referring to several energy landscapes. These explanations will focus on building an understanding about the system as described by the minimal model, therefore they will not contain much mathematics but refer to several drawn energy landscapes instead.
 
 \subsection{Seed region}
 The first feature that is predicted by the minimal model, which is also a known feature of Cas9 is that the closer a mismatch is to the PAM, the less likely the sequence is to cleave [SOURCE]. One could assume then that the sequence is also less likely to bind than another sequence without mismatches or with mismatches far removed from the PAM. The region 'close to the PAM' is often referred to as the seed region. If there is a mismatch in this seed region binding is hard and most dCas9 will stay unbound. If instead a mismatch occurs at the end of a sequence dCas9 will readily bind to that sequence. The switch from low binding probability to high binding probability happens at the end of the seed region. This seed region can be easily identified in any energy landscape. In figure \ref{fig:seedregionexample} an energy landscape is drawn with a mismatch at position seven, while the used parameters would predict a seed region of ten base pairs.
 
-%TODO
-%\label{fig:seedregionexample}
-%MISMATCH AT SEVEN
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{images/seedregionexample}
+\label{fig:seedregionexample}
+\caption{An energy landscape with a seed region of ten and a mismatch placed at position seven.}
+\end{center}
+\end{figure}
 
-In figure \ref{fig:seedregionexample} the mismatch occurs within the seed region and this can easily be spotted by the fact that the mismatch occurs before any bound state becomes more favorable than the solution state. Since the solution state is still the most favorable state most of the dCas9 will occupy the solution state in equilibrium. If instead the mismatch would be placed outside the seed, as in figure \ref{fig:seedregionexample2} then several bound states will have a free energy lower than the energy of the solution state. These states will be more favorable in equilibrium and therefore dCas9 will mostly occupy these states in equilibrium.
+In figure \ref{fig:seedregionexample} the mismatch occurs within the seed region and this can easily be spotted by the fact that the mismatch occurs before any bound state becomes more favorable than the solution state. Since the solution state is still the most favorable state up to the mismatch most of the dCas9 will occupy the solution state in equilibrium. If instead the mismatch would be placed outside the seed, as in figure \ref{fig:seedregionexample2} then several bound states will have a free energy lower than the energy of the solution state. These states will be more favorable in equilibrium and therefore dCas9 will mostly occupy these states in equilibrium.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{images/seedregionexample2}
+\label{fig:seedregionexample2}
+\caption{An energy landscape with a seed region of ten and a mismatch placed at position seventeen.}
+\end{center}
+\end{figure}
 
 The length of the seed region is then determined by the values of the energy parameters $\epsilon PAM$ and $\epsilon C$. An increase in $\epsilon PAM$ lifts the energy of all states, thus making the seed region larger as it takes more matches to drop the energy below the solution energy. On the contrary a decrease in $\epsilon C$ (which is an increase in absolute value since $\epsilon C$ is negative) will make the seed region shorter, as it will take less matches to revert the energy gain from the PAM. A decrease in $\epsilon C$ has another effect on the seed region: it will make the transition from low to high binding sharper. This is because with each matching base pair the energy drops an amount $|\epsilon C$. If this is large amount then crossing the solution energy threshold can happen within a single base pair and if it is even larger then the energy of the most favorable bound state can, within one match, go from a large positive (unfavorable) energy to a large negative (favorable) energy. If there is such a sharp transition the dCas9 will go from mostly occupying the unbound state to mostly occupying the most favorable bound state if the mismatch is moved one position to the back.
 
-Note that this definition of the seed region is fundamentally different than the definition given in \citep{Misha}, even though the same model is used. The reason for this discrepancy is that in this thesis binding instead of cleavage is considered. For cleavage the transition energies (the peaks in the energy landscape) are important while for binding the free energies (the valleys in the energy landscape) are important. For binding these free energies are important because those are the energies that the R-loops will have when they occupy those states in equilibrium. Why exactly the transition energies are important for cleavage we will leave to \citep{Misha}, for now it suffices to say that it has to do with the fact that Cas9 has to be able to make it over these energy barriers to the end of the sequence to cleave the sequence but this is not a necessity to bind the sequence.
+Note that this definition of the seed region is fundamentally different than the definition given in \cite{Misha}, even though the same model is used. The reason for this discrepancy is that in this thesis binding instead of cleavage is considered. For cleavage the transition energies (the peaks in the energy landscape) are important while for binding the free energies (the valleys in the energy landscape) are important. For binding these free energies are important because those are the energies that the R-loops will have when they occupy those states in equilibrium. Why exactly the transition energies are important for cleavage we will leave to \citep{Misha}, for now it suffices to say that it has to do with the fact that Cas9 has to be able to make it over these energy barriers to the end of the sequence to cleave the sequence but this is not a necessity to bind the sequence.
 
 
 \subsection{Minimum binding}
 
 A second feature of the minimal model is that there will always be a minimum amount of binding for any sequence with any amount of mismatches. If we take a look at an energy landscape of a sequence containing two mismatches (shown in figure \ref{fig:minbindingexample}) it becomes clear why this is the case.
 
-%TODO double mismatch energy landscape
-%\label{fig:minbindingexample}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{images/minbindingexample}
+\label{fig:minbindingexample}
+\caption{An example energy landscape containing two mismatches (positions twelve and sixteen). State eleven has lower energy than the solution state. }
+\end{center}
+\end{figure}
 
 As can be seen in figure \ref{fig:minbindingexample} even though there are two mismatches some of the bound states are quite close or even below the solution energy. In equilibrium these states will have a significant amount of binding, even though the sequence contained two mismatches. There are two ways to limit this binding despite mismatched bases. The first one is quite obvious: simply add more mismatches. This will increase the energy of all subsequent states even more, therefore decreasing the amount of binding to the point where it becomes negligible. A second way is to move the mismatches closer to the PAM. Even though the total energy gained and dropped is still the same, since the parameters did not change and the amount of mismatches is constant, the fraction of bound dCas9 can still change. That the total energy gained and dropped is the same is easily proven by the fact that the final state is at the same energy, no matter where the mismatches occur. However, the states before the mismatches are not all at the same energy. Sequences that have mismatches occur nearer to the PAM contain more states where the energy increase from the mismatch has an influence. This is due to the nature of the model; where the energy of each state is the sum over the energies of all previous states plus the energy gain or penalty of the state itself. This is very easy to see if two energy landscapes with the same amount of mismatches are overlapped as in figure \ref{fig:minbindingexample2}. The sequence with mismatches more to the end clearly has more states with a lower energy, even though the final energy is the same.
 
-%TODO overlap two energy landscape
-%\label{fig:minbindingexample2}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{images/minbindingexample2}
+\label{fig:minbindingexample2}
+\caption{Two possible energy landscapes containing two mismatches each generated with the minimal model. The blue landscape is the same as in figure \ref{fig:minbindingexample}. Even though the total number of mismatches is the same, the blue energy landscape has more states with much lower energies.}
+\end{center}
+\end{figure}
 
 The minimal amount of binding in equilibrium, according to the minimal model, is therefore the amount of bound dCas9 on the sequence where all mismatches occur at the very start of the R-loop. In the case of two mismatches the sequence where mismatches occur at position one and two would bind the minimum amount of dCas9 that will be bound by any sequence where in total two mismatches occur. Naturally then if the amount of mismatches increases, the minimum amount of bound dCas9 decreases.
 
@@ -201,8 +229,13 @@ The minimal amount of binding in equilibrium, according to the minimal model, is
 \subsection{Maximum binding}
 The minimal model not only predicts a minimum amount of bound dCas9 given a number of mismatches, it also predicts a maximum amount of bound dCas9. The reasoning is much the same as the reasoning for the minimum binding but reversed. The maximum amount of binding for a sequence with $n$ mismatches is reached when those mismatches occur in the last $n$ states. This is also very clear if we overlap two energy landscapes of two sequences with the same number of total mismatches, shown in figure \ref{fig:maxbindingexample}. The sequence which contains the later mismatches has more states with a lower energy, even though the final state again has the same energy in both cases. Since there are more states with a lower free energy, a higher fraction of dCas9 will bind to that sequence.
 
-%TODO overlap two energy landscapes.
-%\label{fig:maxbindingexample}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{images/minbindingexample2}
+\label{fig:minbindingexample}
+\caption{Two possible energy landscapes containing two mismatches each generated with the minimal model. Even though the total number of mismatches is the same, the orange energy landscape has more states with much higher energies.}
+\end{center}
+\end{figure}
 
 In the same way as with the minimum binding the maximum amount of binding can be decreased in two ways. Firstly it is possible to increase the number of mismatches. Secondly it is possible to move the mismatches to the end of the sequence. No sequence with $n$ mismatches can therefore bind more dCas9 than a sequence with those $n$ mismatches at the final $n$ positions.
 
@@ -211,16 +244,31 @@ In the same way as with the minimum binding the maximum amount of binding can be
 
 The previous features were all easily demonstrated by looking at the energy landscape since they all depended on single things. The last feature of the minimal model that will be discussed here is different because it depends on an interaction within the energy landscape. The pair region refers to a sort of second-seed region. The seed region discussed before is the region where a mismatch prohibits much binding of any sort and can be identified in the energy landscape as the point where the energy of the matching bases dips below the energy of the solution. Consider now that the effect of a mismatch is not as large as in figure \ref{fig:seedregionexample} but smaller as in figure \ref{fig:pairexample1}. Then the final states are still below the energy of the solution state and therefore there will still be significant binding in equilibrium, even though there is a mismatch in the seed.
 
-%TODO small single mismatch
-%\label{fig:pairexample1}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{images/pairexample1}
+\label{fig:pairexample1}
+\caption{A possible energy landscape with a seed mismatch which still contains stable bound states.}
+\end{center}
+\end{figure}
 
 This changes if a second mismatch is added. If the second mismatch is placed directly behind the first one then there may be no state below the solution state, as shown in figure \ref{fig:pairexample2}, however if the mismatches are spaced apart a similar situation as with the PAM occurs. The energy of the R-loop starts near the energy of the solution state and is increased. This increase is now due to a mismatch instead of the PAM but there is an increase nonetheless. Then there may follow a number of matching base pairs which create a second opportunity to decrease the energy below the energy of the solution. If the second mismatch is placed after this second-seed region then there will be a state or several states which are again more favorable than the solution state, therefore increasing the amount of binding significantly. This second seed region is named the pair region. An example of a sequence where the second mismatch is placed after the pair region is shown in figure \ref{fig:pairexample3}.
 
-%TODO double consecutive mismatch
-%\label{fig:pairexample2}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{images/pairexample2}
+\label{fig:pairexample2}
+\caption{A possible energy landscape with a double seed mismatch so that there are no stable bound states.}
+\end{center}
+\end{figure}
 
-%TODO double mm pair
-%\label{fig:pairexample3}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{images/pairexample3}
+\label{fig:pairexample3}
+\caption{A possible energy landscape with a seed mismatch and a mismatch at the end so that the second mismatch does not prohibit binding even though there is a seed mismatch. The second mismatch is placed after the pair region.}
+\end{center}
+\end{figure}
 
 The pair region is very similar to the seed region. It gets larger as the energy increase which causes it gets larger; the mismatch energy penalty in the case of the pair region. It gets smaller and sharper as the energy gain from a match becomes larger, all for the same reasons as for the seed region. In theory there can be multiple pair regions if there are more than two mismatches present, however the length of the gRNA is limited so there can not be arbitrarily many pair regions without extending the gRNA.
 

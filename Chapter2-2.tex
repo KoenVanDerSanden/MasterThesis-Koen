@@ -6,7 +6,7 @@ In this chapter we will discuss the minimal model in depth. The minimal model, a
 
 The first step in analyzing the minimal model is getting the correct values for the parameters in our model. The exact values of $\epsilon C, \epsilon I$ and $\epsilon PAM$ determine the behaviour of the model, therefore it is essential to get these values as accurate as possible. To obtain these values we will fit the model to data from \cite{PNAS}. This data set was chosen because it has several advantages over other data sets. For one it is very large, it contains all single and double mismatch and on top of that also sequences with more than two mismatches. Furthermore the authors have measured several properties of the enzymes: the on-rate, the off-rate and the occupancy. This allows us to fit on multiple data sets and test our fit for a different experiment.
 
-\subsection{Methods of \citep{PNAS}}
+\subsection{Methods of \cite{PNAS}}
 
 To better understand why we did certain things in our fitting procedure it is useful to understand how \citep{PNAS} performed their measurements. Firstly, \cite{PNAS} used a DNA sequencing chip over which they let flow a solution of dCas9. %TODO better name for chip
 They knew exactly where each sequence was located on their chip. This allowed them to do fluorescence experiments and link the fluorescence signal to a specific sequence, by checking the location of the signal.
@@ -24,7 +24,14 @@ where $X_i$ is the x-value of the i-th data point and $Y_i$ is the y-value of th
 
 It is well-known and also logical that the this linear increase in occupation cannot hold for all times; a natural binding and unbinding process will follow an exponential which starts out as a linear process but eventually flattens gradually into an equilibrium, see figure \ref{fig:linearvexponentialexample}. The mathematical justification for the linear approximation is provided in section \ref{sec:mathematicaljustificationlinearapprox}. It will turn out this approximation is only valid for very fast times compared to the rates of the system.
 
-%TODO fig:linearvexponentialexample
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{images/linearvexponentialexample}
+\label{fig:linearvexponentialexample}
+\caption{The difference over time between the bound fraction predicted by the linear approximation and the exponential solution. }
+\end{center}
+\end{figure}
 
 \subsubsection{The linear approximation}
 \label{sec:mathematicaljustificationlinearapprox}
@@ -85,14 +92,19 @@ Here $c_1 = \frac{-k_f}{k_f+k_b}$ because $P_{bound}(t=0) = 0$. Equation \ref{eq
 \item We can neglect all second order and higher terms in the Taylor expansion of equation \ref{eq:TaylorExpPB}. This is valid only if $\frac{(k_f+k_b)t}{2} \ll 1$.
 \end{itemize}
 
-
-%TODO fig:two-state-model
+\begin{figure}[H]
+\begin{center}
+\includegraphics[width=\textwidth]{images/TwoState}
+\label{fig:two-state-model}
+\caption{A schematic representation of the simplified two state system.}
+\end{center}
+\end{figure}
  
 
 
 \subsection{Observations from \cite{PNAS}}
 
-In the previous section we have reiterated how \cite{PNAS} performed their measurements, In this section we will take a look at their observations by primarily examining the three heatmaps they have provided: figures a, b and c in \cite{PNAS}. %TODO %TODO %TODO
+In the previous section we have reiterated how \cite{PNAS} performed their measurements, In this section we will take a look at their observations by primarily examining the three heatmaps they have provided: figures 2B, 3A and S2 in \cite{PNAS}.
 These heatmaps show the effective on-rate, the effective off-rate and the occupation in equilibrium respectively. If the minimal model is to hold then it has to be able to explain the observations that are made in these heatmaps. Since the minimal model is as simplistic as possible it is unlikely that it is able to explain every feature in the data, however assuming that the general underlying model is correct, even the minimal model should be able to qualitatively describe most of the features found in the data. Let us first take a look at the effective on-rate.
 
 \subsubsection{Effective on-rate}
@@ -118,13 +130,13 @@ The RDR is even more problematic than that as, even if we include all possible b
 
 \subsubsection{Occupation}
 
-The final heatmap that is published in \cite{PNAS} is supplementary figure  . %TODO
+The final heatmap that is published in \cite{PNAS} is supplementary figure S2.
 Here the authors show the intensity of the fluorescence signal after twelve hours. For the purposes of this report it is assumed that the mixture of DNA and dCas9 is in local equilibrium after twelve hours. It is hard to justify this assumption definitively, but we will try to make it at least believable.
 
 First of all, in order to function as an effective immune system for the bacteria who use CRISPR as a means to fend off virusses it is necessary that Cas9 is able to cleave the correct sequences quite quickly. If Cas9 is able to cleave the on-target then it must have reached the fully bound R-loop state. It is then a reasonable assumption that the on-target is able to reach equilibrium after twelve hours. Of course, adding mismatches slows down the entire binding process. However it is also known that Cas9 is able to cleave invasive virus RNA containing a mismatch as a means of defending itself. Therefore the mismatch barrier cannot be insurmountable on these, relatively short, timescales. It is then not far-fetched to also assume that double mismatches could be overcome in twelve hours. %TODO binding times source!
 
 Secondly, we assume that the system is in a local equilibrium, instead of a global equilibrium. This means that the individual clusters on the DNA sequencing chip are in equilibirum with their immediate surroundings, but the entire chip is not in equilibrium. %TODO better name for sequencing chip.
-This is harder to justify than the claim that the chip is likely in equilibrium. One argument is that, if the entire chip was in equilibrium, all double mismatch sequences would be outcompeted almost entirely by the on-target sequence. This is not what happens in the experiment and therefore it is unlikely that the entire chip is in global equilibrium. This argument ignores the effect of competition between sequences and assumes there is an infinite amount of on-target sequences (and all other sequences) to bind to, which is obviously not the case on the actual chip. Nevertheless one might expect a more skewed image, with much more fluorescence concentrated at the on-target and single mismatch sequences, if the chip was in a global equilibrium. A second argument in favor of a local equilibrium instead of a global equilibrium is that to establish a global equilibrium every dCas9 enzyme must have had the oppertunity to explore the entire chip and all available states. The diffusion coefficient of a small protein in water is about $100 \mu m^2/s$. %TODO [SOURCE]: http://www.life.illinois.edu/crofts/bioph354/diffusion1.html
+This is harder to justify than the claim that the chip is likely in equilibrium. One argument is that, if the entire chip was in equilibrium, all double mismatch sequences would be outcompeted almost entirely by the on-target sequence. This is not what happens in the experiment and therefore it is unlikely that the entire chip is in global equilibrium. This argument ignores the effect of competition between sequences and assumes there is an infinite amount of on-target sequences (and all other sequences) to bind to, which is obviously not the case on the actual chip. Nevertheless one might expect a more skewed image, with much more fluorescence concentrated at the on-target and single mismatch sequences, if the chip was in a global equilibrium. A second argument in favor of a local equilibrium instead of a global equilibrium is that to establish a global equilibrium every dCas9 enzyme must have had the oppertunity to explore the entire chip and all available states. The diffusion coefficient of a small protein in water is about $100 \mu m^2/s$ \citep{brune1993predicting}.
 This means in twelve hours every protein has had the ability to explore $4.32 mm^2$ of the chip. However while diffusing dCas9 also binds and unbinds to the DNA sequences it encounters, so this estimation is necessarily an overestimation. Since this explored surface area is on the same order of magnitude as that of the chip, combined with the fact our calculation is an upper limit it is not unreasonable to say that not every dCas9 has the oppertunity to explore all the available states. %TODO chip size.
 
 The general zipper model is able to predict the fraction of bound dCas9 by calculating the boltzmann weight of every available state. Using these weights it is possible to calculate the probability to be in any state, given that the system is in equilibrium, as described in section \ref{sec:EquilTheory}. The minimal model merely provides a way to prescribe the energy of each state so the boltzmann weights can be calculated. The minimal model predicts that the further down the mismatch, the more stable the R-loop and therefore a larger fraction of bound dCas9. It also predicts an interaction between mismatches which form a region analogous to the $n_{pair}$ region from \cite{Misha}. Both these observations can be seen in the occupation heatmap from \cite{PNAS}, albeit that the seed region is much more pronounced than the $n_{pair}$ region. This can however simply be a matter of parameter values.
@@ -154,12 +166,17 @@ To circumvent these issues with the data, the data was transformed before the fi
 
 %TODO include spearman coefficient or some other form of comparison tool
 
-The fit was performed nultiple times on replica 1 and replica 2 from \cite{PNAS} separately. Furthermore the fit was also repeated several times on different subsets of data. This allows for testing of the model within the total data set as well as testing on other data sets. We will start by showing the fit on the total data for replicas one and two separately; these results can be found in figures ... and table ... %TODO reference figures and table of results
+The fit was performed nultiple times on replica 1 and replica 2 from \cite{PNAS} separately. Furthermore the fit was also repeated several times on different subsets of data. This allows for testing of the model within the total data set as well as testing on other data sets. We will start by showing the fit on the total data for replicas one and two separately; these results can be found in figures \ref{...} and table \ref{tab:MinModelResults}. %TODO reference figures and table of results
 
 
 %TODO figures containing heatmaps of occupation fit 
 %TODO single mismatch figures
-%TODO table containing results
+\begin{table}
+\begin{center}
+\csvautotabular{tables/Rep1MinModelResults.csv}
+\label{tab:MinModelResults}
+\end{center}
+\end{table}
 
 Figures ... %TODO reference figures with errors
 may be even more useful. They show the relative and absolute error in the prediction. When examining these errors it is important to realize that the fitting function that was used to obtain the model parameters minimizes the \textit{absolute} error, not the relative error.
