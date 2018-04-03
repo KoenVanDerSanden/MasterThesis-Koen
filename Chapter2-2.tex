@@ -7,6 +7,7 @@ In this chapter we will discuss the minimal model in depth. The minimal model, a
 The first step in analyzing the minimal model is getting the correct values for the parameters in our model. The exact values of $\epsilon C, \epsilon I$ and $\epsilon PAM$ determine the behaviour of the model, therefore it is essential to get these values as accurate as possible. To obtain these values we will fit the model to data from \cite{PNAS}. This data set was chosen because it has several advantages over other data sets. For one it is very large, it contains all single and double mismatch and on top of that also sequences with more than two mismatches. Furthermore the authors have measured several properties of the enzymes: the on-rate, the off-rate and the occupancy. This allows us to fit on multiple data sets and test our fit for a different experiment.
 
 \subsection{Methods of \cite{PNAS}}
+\label{sec:BoyleMethods}
 
 To better understand why we did certain things in our fitting procedure it is useful to understand how \citep{PNAS} performed their measurements. Firstly, \cite{PNAS} used a DNA sequencing chip over which they let flow a solution of dCas9. %TODO better name for chip
 They knew exactly where each sequence was located on their chip. This allowed them to do fluorescence experiments and link the fluorescence signal to a specific sequence, by checking the location of the signal.
@@ -25,7 +26,7 @@ where $X_i$ is the x-value of the i-th data point and $Y_i$ is the y-value of th
 It is well-known and also logical that the this linear increase in occupation cannot hold for all times; a natural binding and unbinding process will follow an exponential which starts out as a linear process but eventually flattens gradually into an equilibrium, see figure \ref{fig:linearvexponentialexample}. The mathematical justification for the linear approximation is provided in section \ref{sec:mathematicaljustificationlinearapprox}. It will turn out this approximation is only valid for very fast times compared to the rates of the system.
 
 
-\begin{figure}[H]
+\begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{images/linearvexponentialexample}
 \label{fig:linearvexponentialexample}
@@ -166,22 +167,55 @@ To circumvent these issues with the data, the data was transformed before the fi
 
 %TODO include spearman coefficient or some other form of comparison tool
 
-The fit was performed nultiple times on replica 1 and replica 2 from \cite{PNAS} separately. Furthermore the fit was also repeated several times on different subsets of data. This allows for testing of the model within the total data set as well as testing on other data sets. We will start by showing the fit on the total data for replicas one and two separately; these results can be found in figures \ref{...} and table \ref{tab:MinModelResults}. %TODO reference figures and table of results
+The fit was performed nultiple times on replica 1 and replica 2 from \cite{PNAS} separately. Furthermore the fit was also repeated several times on different subsets of data. This allows for testing of the model within the total data set as well as testing on other data sets. We will start by showing the fit on the total data for replicas one and two separately; these results can be found in figures \ref{fig:MinModelResultsHM} and tables \ref{tab:MinModelResultsRep1} \& \ref{tab:MinModelResultsRep2}. %TODO reference figures and table of results
 
 
-%TODO figures containing heatmaps of occupation fit 
-%TODO single mismatch figures
 \begin{table}
 \begin{center}
-\csvautotabular{tables/Rep1MinModelResults.csv}
-\label{tab:MinModelResults}
+\csvautobooktabular{tables/Rep1MinModelResults.csv}
+\caption{Table containing the fit results for the energy gain of a match, the energy penalty of a mismatch and the energy penalty of the PAMfor replica one. The average of the fit results is reported in the bottom row. When calculating the average, fit \# 4 is omitted since it is an outlier.}
+\label{tab:MinModelResultsRep1}
 \end{center}
 \end{table}
 
-Figures ... %TODO reference figures with errors
+\begin{table}
+\begin{center}
+\csvautobooktabular{tables/Rep2MinModelResults.csv}
+\caption{Table containing the fit results for the energy gain of a match, the energy penalty of a mismatch and the energy penalty of the PAM for replica two. The average of the fit results is reported in the bottom row. When calculating the average, fits \# 5 and \# 6 were omitted since they are outliers. Note that there is one less fit result than for replica 1 as one of the fits failed to produce any results. }
+\label{tab:MinModelResultsRep2}
+\end{center}
+\end{table}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.45\textwidth]{images/MinModelRep1}
+\includegraphics[width=0.45\textwidth]{images/MinModelRep2}
+\caption{These heatmaps show the predicted occupation in equilibrium based on the minimal model with parameters that were obtained from fitting to replica 1 (left) and replica 2 (right) from \cite{PNAS}. The average values from tables \ref{tab:MinModelResultsRep1} and \ref{tab:MinModelResultsRep2} were used for these heatmaps. On the diagonals the single mismatch predictions are shown. }
+\label{fig:MinModelResultsHM}
+\end{center}
+\end{figure}
+
+Figures \ref{fig:MinModelRep1ErrorsHM} and \ref{fig:MinModelRep2ErrorsHM} %TODO reference figures with errors
 may be even more useful. They show the relative and absolute error in the prediction. When examining these errors it is important to realize that the fitting function that was used to obtain the model parameters minimizes the \textit{absolute} error, not the relative error.
 
-%TODO error figures (absolute + relative)
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.45\textwidth]{images/MinModelRep1AbsErr}
+\includegraphics[width=0.45\textwidth]{images/MinModelRep1RelErr}
+\caption{These heatmaps show the absolute difference between the measured and the predicted occupation in equilibrium based on the minimal model. Both the measurement and the fit were done on replica 1 from \cite{PNAS}.}
+\label{fig:MinModelRep1ErrorsHM}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.45\textwidth]{images/MinModelRep2AbsErr}
+\includegraphics[width=0.45\textwidth]{images/MinModelRep2RelErr}
+\caption{These heatmaps show the absolute difference between the measured and the predicted occupation in equilibrium based on the minimal model. Both the measurement and the fit were done on replica 2 from \cite{PNAS}.}
+\label{fig:MinModelRep2ErrorsHM}
+\end{center}
+\end{figure}
+
 
 Several specific features of these results will be looked at in greater detail in following sections. One surprising result we would like to bring to your attention now however is the positive value for the PAM energy. It turns out that the best fit to the data is one where binding to the PAM is unfavorable compared to the solution state. This is allowed within the minimal (and general) model as it violates no assumption that was made in section \ref{seq:generalmodel}. It was mentioned that a matching PAM sequence should be favorable compared to a non-matching PAM sequence. Since this can still be the case a positive $\epsilon PAM$ is allowed within the model. In section ... %TODO ref section
 it is also explained that the PAM, and therefore all energies, are concentration dependent. Thus the actual PAM energy in-vivo could possibly be much lower. %TODO back-of-the-envelope calculation..
@@ -240,18 +274,16 @@ A simple addition to the model could be a position dependent $\epsilon I$. For e
 
 A third feature that is apparent in the data but not in the model is hidden in the region where the occupancy is highest. In this region the model predicts an occupancy of almost $1$, meaning the same occupancy as the on-target. This is a logical prediction within the minimal model as a double mismatch at positions nineteen and twenty would still have $18$ matching base pairs before any mismatches occur. If the seed region extends to base pair ten then ten matching base pairs approximately bring the energy of the R-loop down to the energy of the solution, resulting in about an even split between bound and unbound dCas9, as we have seen in section \ref{sec:minmodelresultsseedregion}. If another eight matching bases are then added beyond the seed region the bound fraction is approximately $0.5 \cdot \exp(-8\epsilon C)$, which approximately equals $1$ if $|\epsilon C|$ is not absurdly low.
 
-The model is quite clear with its results in this high occupancy region, but the data is not so clear. According to the data these sequences with mismatches at the final few bases are actually easier to bind to than the on-target; resulting in measured occupancies higher than $1$. This is strange behavior when you consider the original role of Cas9 in the immune system of a bacterium. Logically one would say that Cas9 would be best at cleaving the on-target sequence, as that is the sequence which corresponds exactly to the gRNA. This property would also make it perform best at defending against invading viruses which match the gRNA sequence. Of course it could be that these sequences are more favorable to bind than the on-target sequence but it would contradict some of the assumptions we have made at the very start for the general zipper model. These abnormally high occupancies could be explained be an (position dependent) energy penalty for a match or a (position dependent) energy gain for a mismatch. However other models which would not contradict the general assumptions so blatantly could perhaps also explain this behavior. Effects from neighboring bases, sequence related effects or protein related effects can all also be causes for the increased occupancy of these off-targets. Finally, although the data quality is good %TODO prove?
+The model is quite clear with its results in this high occupancy region, but the data is not so clear. According to the data these sequences with mismatches at the final few bases are actually easier to bind to than the on-target; resulting in measured occupancies higher than $1$. This is strange behavior when you consider the original role of Cas9 in the immune system of a bacterium. Logically one would say that Cas9 would be best at cleaving the on-target sequence, as that is the sequence which corresponds exactly to the gRNA. This property would also make it perform best at defending against invading viruses which match the gRNA sequence. Of course it could be that these sequences are more favorable to bind than the on-target sequence but it would contradict some of the assumptions we have made at the very start for the general zipper model. These abnormally high occupancies could be explained be an (position dependent) energy penalty for a match or a (position dependent) energy gain for a mismatch. However other models which would not contradict the general assumptions so blatantly could perhaps also explain this behavior. Effects from neighboring bases, sequence related effects or protein related effects can all also be causes for the increased occupancy of these off-targets. Finally, although the data quality is good, %TODO prove?
 the increased occupancy measurements could also simple be the result of noise. If the noise is relative to the signal strength then this would explain why this effect is less apparent in the low occupancy region. However the increased occupancy seems to be consistent throughout the entire high occupancy region, which is not what you would expect if the effect was purely caused by symmetric noise.
 
 \subsubsection{Pair region}
-At the very edges of the heatmaps there are again regions with a higher occupation even though they contain mismatches within the seed. These regions are the pair regions where the mismatches interact in such a way that there can still be significant binding even though there is a mismatch early in the sequence. This 'second seed region' effect is described in \ref{sec:TheoryPair}. For some sequences it can easily be understood; for example a sequence with mismatches at positions one and twenty. This sequence essentially behaves as a sequence with only a single mismatch at position one, since the mismatch at position twenty has a negligible effect on the binding. For other sequences it is less clear and size of the pair region is actually determined by the ratio of mismatch energy penalty to match energy gain. In the case of the minimal model for replica one this ratio is .. %TODO
-Therefore the pair region should be another .. bases after the seed region, which is indeed the case. %TODO
+At the very edges of the heatmaps there are again regions with a higher occupation even though they contain mismatches within the seed. These regions are the pair regions where the mismatches interact in such a way that there can still be significant binding even though there is a mismatch early in the sequence. This 'second seed region' effect is described in \ref{sec:TheoryPair}. For some sequences it can easily be understood; for example a sequence with mismatches at positions one and twenty. This sequence essentially behaves as a sequence with only a single mismatch at position one, since the mismatch at position twenty has a negligible effect on the binding. For other sequences it is less clear and size of the pair region is actually determined by the ratio of mismatch energy penalty to match energy gain. In the case of the minimal model for replica one this ratio is approximately $6.16$. Therefore the pair region should be another six to seven bases after the seed region. For replica two the pair region is another eight to nine bases after the seed. Both these numbers can be confirmed if we take a look at figure \ref{fig:MinModelResultsHM}. On the left (replica one) we see a seed region of ten to eleven basepairs, as confirmed by the fit, and the pair region shows up around basepair seventeen. On the right (replica two) we see a seed region of around fourteen basepairs and the pair region is therefore much less pronounced. It is still possible to see the very start of the pair region since the match gain is quite low, so transitions are stretched out over many basepairs.
 
 
 \section{Effective on-rate fit}
 
-Fitting to the occupation data fixed all energies in the minimal model. Knowing these three parameters allows you to predict the equilibrium state of the system, however to predict the time evolution of the system more parameters need to be known, as discussed in section \ref{...}. %TODO
-These parameters are the 'on-rate' and the 'attempt rate' of the system: the rate of binding from solution to PAM and the rate of moving from any bound state to any other state respectively. In this section these two parameters will be fit to the effective on-rate data gathered by \cite{PNAS}.
+Fitting to the occupation data fixed all energies in the minimal model. Knowing these three parameters allows you to predict the equilibrium state of the system, however to predict the time evolution of the system more parameters need to be known, as discussed in section \ref{sec:TimeDepTheory}. These parameters are the 'on-rate' and the 'attempt rate' of the system: the rate of binding from solution to PAM and the rate of moving from any bound state to any other state respectively. In this section these two parameters will be fit to the effective on-rate data gathered by \cite{PNAS}.
 
 
 \subsection{Model for the fit}
@@ -273,9 +305,7 @@ The general procedure is clear, however some details of the model still need to 
 \vec{P}(t=0) = \left[ 1, 0, 0, 0, ..., 0, 0 \right].
 \end{equation}
 
-The second step of the general procedure is to calculated the occupancy of each state at three evenly spaced timepoints. Within this step essentially the entire minimal model is hidden. To calculate the occupancy at different timepoints two things are needed: the occupancy of each state at a single timepoint, the initial condition, and the rate matrix, which describes the evolution of the occupancy vector through time. If these two things are known it is possible to evaluate equation \ref{...} at any timepoint. Luckily the initial condition is known from the previous step. The rate matrix is not entirely known, it depends on both the energy landscape and the rates from the minimal model. In this fit the energy landscape is fixed from the occupancy fit, however the rates are still free. The rates are therefore the parameters that will be fitted. In the minimal model we will make the assumption that all attempt rates are equal as described and justified in section \ref{sec:TheoryTimeDep}. This reduces the number of rates that need to be fitted to only two. Knowing the energy landscape and the fitted rates allows us to calculate the occupancy at the three different timepoints and move on to step three. Step three, four and five are all relatively straightforward. The occupancies that are calculated in step two will be used to calculate the bound fraction of dCas9. In this case again it is assumed that dCas9 is bound when it is not in the solution state. In step four a line is fitted to the occupancies, this fitting procedure is described in section \ref{..} %TODO
-and is the same fitting procedure as is carried out by \cite{PNAS}.
-Finally in step five the effective on-rate is obtained from the model which can be compared to the measured effective on-rate. 
+The second step of the general procedure is to calculated the occupancy of each state at three evenly spaced timepoints. Within this step essentially the entire minimal model is hidden. To calculate the occupancy at different timepoints two things are needed: the occupancy of each state at a single timepoint, the initial condition, and the rate matrix, which describes the evolution of the occupancy vector through time. If these two things are known it is possible to evaluate equation \ref{...} at any timepoint. Luckily the initial condition is known from the previous step. The rate matrix is not entirely known, it depends on both the energy landscape and the rates from the minimal model. In this fit the energy landscape is fixed from the occupancy fit, however the rates are still free. The rates are therefore the parameters that will be fitted. In the minimal model we will make the assumption that all attempt rates are equal as described and justified in section \ref{sec:TheoryTimeDep}. This reduces the number of rates that need to be fitted to only two. Knowing the energy landscape and the fitted rates allows us to calculate the occupancy at the three different timepoints and move on to step three. Step three, four and five are all relatively straightforward. The occupancies that are calculated in step two will be used to calculate the bound fraction of dCas9. In this case again it is assumed that dCas9 is bound when it is not in the solution state. In step four a line is fitted to the occupancies, this fitting procedure is described in section \ref{sec:BoyleMethods} and is the same fitting procedure as is carried out by \cite{PNAS}. Finally in step five the effective on-rate is obtained from the model which can be compared to the measured effective on-rate. 
 
 %TODO Switch Model and Data sections around for more fluid story..? - Feels double now and confusing now.
 \subsection{Data for the fit}
@@ -286,7 +316,24 @@ The provided effective on-rate data from \cite{PNAS} contains the slopes of the 
 The fit was performed on replica 1 and 2 from \citep{PNAS} separately and repeated several times. The results of the fit are more conclusive than the the results of the occupation fit, as can be seen in table \ref{...}. The fit results are shown as a heatmap in figures \ref{...} and \ref{...}. As with the occupancy fit the absolute and relative errors are also plotted in heatmap format in figures \ref{...} and \ref{...}. Again, these fits were performed with the simulated annealing algorithm described in chapter \ref{ch:SA} and minimize the absolute error.
 
 %TODO
-%Table with results
+% Explain why On Rate does not matter.
+
+%\begin{table}
+%\begin{center}
+%\csvautobooktabular{tables/Rep1MinModelResultsOnRate.csv}
+%\caption{}
+%\label{tab:MinModelResultsRep1}
+%\end{center}
+%\end{table}
+
+%\begin{table}
+%\begin{center}
+%\csvautobooktabular{tables/Rep2MinModelResultsOnRate.csv}
+%\caption{}
+%\label{tab:MinModelResultsRep2}
+%\end{center}
+%\end{table}
+
 %Heatmap with results
 %Error heatmap
 
