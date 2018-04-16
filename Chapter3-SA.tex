@@ -1,0 +1,99 @@
+%TODO Review this chapter entirely, only read once.
+%TODO link public github?
+
+\chapter{Simulated Annealing Algorithm}
+\label{ch:SA}
+
+To fit parameters to the data a fitting algorithm had to be chosen. For almost all of the fitting we used a simulated annealing algorithm. In this chapter we will explain the inner workings of this algorithm and we will explain why we specifically used this algorithm.
+
+
+
+\section{Basic principles of simulated annealing}
+
+\cite{SA} %TODO ...
+
+Simulated annealing is a form of an optimization algorithm. It draws inspiration from statistical mechanics. In statistical mechanics systems with many particles and therefore many degrees of freedom reach a thermal equilibrium. This behaviour is similar to a function with many degrees of freedom for which one tries to find the global minimum.
+
+In statistical mechanics a system can be in a finite number of states. Each of these states has a specific energy associated with it. In thermal equilibrium the probability to be in any of these states follows the boltzmann distribution, as we have discussed in section \ref{seq:EquilTheory}. Naturally then, if a system is cooled down to a low enough temperature the only occupied state will be the state with the lowest energy. In the optimization analogy this lowest energy state would be the minimum of the function we are trying to minimize. There is one catch to this idea; if a system is cooled down fast enough it will reach a local equilibrium but not a global equilibrium. As an example take a liquid which is cooled down so it forms a solid. If the cooling is quick, the solid will form but it will have many defects. Essentially the molecules are simply locked into place. This configuration does have less energy than the liquid state, however it is not the ground state of the system. If instead the cooling process is very gradual the liquid has the time and oppertunity to form a perfect crystal. This crystal is the actual ground state of the system. This gradual cooling is the 'annealing' part of the simulated annealing algorithm. It refers to the very gradual annealing of a crystal from a melt. By 'cooling down' the cost function gradually we are able to obtain better solutions than just the local minima.
+
+That there is an analogy between minimizing the cost function and cooling down an ensemble of particles to its ground state is clear. However, we conveniently left out the temperature analogy up to this point. While clearly there is a temperature when cooling down a physical system, the equivalent of the temperature or the energy of the system is not as clear in the case of the cost function. In fact, simulated annealing algorithms explicitly introduce this temperature. When simulated annealing finds a better solution to the cost function, it accepts that solution until a better one is found. If only these better solutions were accepted that is akin to flash-freezing our system, it will simply move towards the nearest local minimum. Instead, if the algorithm discovers a worse solution it still has some chance to accept this solution. The probability to accept a solution is given by the following formula:
+
+\begin{equation}
+\label{eq:SAProbCost}
+P_{accept} = \exp \left(-\frac{C_1-C_0}{k_BT}\right),
+\end{equation}
+
+where $T$ is the temperature, $k_B$ is the boltzmann constant, $C_0$ is the cost of the old solution and $C_1$ the cost of the new solution. The consequence of choosing this particular probability function is that the system will evolve into a boltzmann distribution over time. It is clear that if we lower the temperature in this case, it becomes harder for worse solutions than the current one to be accepted.
+
+
+\section{Simulated annealing protocol}
+\label{sec:SAProtocol}
+
+The simulated annealing protocol is simple:
+
+\begin{enumerate}
+\item Define some cost function.
+\item Initialize the algorithm by giving it a starting guess for the parameters and an initial temperature.
+\item Vary the parameters slightly and calculate the cost.
+\item Accept or reject the new parameter set based on equation \ref{eq:SAProbCost}.
+\item Repeat step 3 and step 4 a number of times.
+\item If the stop condition is not reached; lower the temperature and return to step 3. If the stop condition is reached continue to step 7.
+\item Return the final parameter set; this should be the minimum of the cost function.
+\end{enumerate}
+
+Although this protocol is simple, there are several points which the designer of the algorithm has to take into consideration. First of all the cost function should be defined. This function is the function that is ultimately minimized (or maximized) and should be representative of the problem which is solved. Secondly the user has to initialize the algorithm with an initial guess and an initial temperature. In theory this initial guess is not important, but the initial temperature is. If the initial temperature is too low, the cost function could already be in a local minimum from the beginning and therefore never reach the global minimum of the cost function. The intial temperature should therefore be high enough that the algorithm has the oppertunity to explore all possible parameters. Thirdly the parameters should be varied slightly when choosing a new parameter set. The issue is that 'slightly' varying the parameters is relative and could also change during the running of the simulated annealing algorithm. Fourthly, the parameters should be changed a a certain number of times before lowering the temperature to simulate the waiting and settling down of the system before continuing to cool it. In our implementation we do a thousand steps before attempting to lower the temperature by default. This effectively makes the algorithm behave quasi-equilibriated. The user should determine how long the algorithm should wait before lowering the temperature again. Finally the user should also determine the stop condition. A simple stop condition could be to stop the algorithm when it reaches a low temperature, however what constitutes a low temperature can change depending on the cost function, the data, etc.
+
+In summary, even though the protocol is simple in essence, there are several things the user needs to consider before using a simulated annealing algorithm.
+
+
+\section{Version used in this thesis}
+
+To overcome the issues laid out in section \ref{sec:SAProtocol} the version of simulated annealing that is used in this thesis uses additional metrics and safeguards to ensure the solution found by simulated annealing is the optimal solution. However even with these safeguards it is important to note that in the end the algorithm is based on Monte-Carlo and therefore produces different results every time. If the algorithm is cut short or gets stuck in a weird local minimum it is also possible it could produce an erroneous result. Because of this every fit is repeated several times to be able to compare between several fits and spot outliers.
+
+%TODO
+-- Sidenote: the algorithm is not perfect, fitting is hard. --
+
+
+\subsection{Cost function}
+
+The cost function is at the heart of the simulated annealing algorithm. Since we are fitting to experimental data the cost function has to be representative of how well the model matches the input data, given a certain parameter set for the model. The metric we use for this is $\chi^2$:
+
+\begin{equation}
+\chi (x)^2 = \left( \frac{model(x)-data(x)}{error(x)} \right)^2.
+\end{equation}
+
+Here $model$ refers to the prediction of the model at point $x$, $data$ refers to the value of the data at $x$ and $error$ to the error of that specific datapoint. By minimizing $\chi^2$ we minimize the total absolute error between the datapoints and the prediction.
+
+
+\subsection{Initial temperature and initial guess}
+
+The initial temperature and the starting parameter set can greatly influence where simulated annealing ends up. We circumvent this issue entirely by dynamically determining the initial temperature. The user still specifies an initial guess but not an initial temperature, the initial temperature is determined within the algorithm itself.
+
+Given an initial parameter set and an intial step size the algoritm does $N$ steps, a thousand by default, and determines how many of the attempted steps are accepted. The ratio of accepted steps to attempted steps is called the acceptance ratio. Ideally we would like to keep this acceptance ratio near $50\%$, because then we are efficiently scanning the landscape. If the acceptance ratio is much higher almost all steps are accepted. This means the temperature is so high that the landscape is essentially flat, if this happens the initial temperature is lowered. When the acceptance ratio is much lower than $50\%$ the energy barriers in the landscape are so high almost no steps are accepted, so the initial temperature is raised. In this way an initial temperature is dynamically determined before the fit starts. By doing this the dependency of the result on the initial temperature and initial guess of the user is eliminated.
+
+\subsection{Stepsize}
+
+As mentioned before the parameter set should be slightly changed every step, but how much is a slight change. In the version of simulated annealing that is used in this thesis we use a dynamically changing stepsize and also take relative steps. Let us first discuss the changing stepsize.
+
+As discussed for the initial temperature we try to keep the acceptance ratio near $50\%$ (by default between $40\%$ and $60\%$). The acceptance ratio is however not only influenced by the temperature but also by the stepsize. If the stepsize is very small then only a very small part of the landscape is sampled. Such a small chunk of the landscape has near identical $\chi^2$ values and therefore most steps will be accepted. In this case the stepsize should thus be increased. In the opposite case if the stepsize is very large then the landscape is sampled at random points and so most attempted steps will be rejected once a single (local) minimum is found. In this case the acceptance ratio is very low and the stepsize should be decreased. This increasing and decreasing of the stepsize also allows us to sample finer and finer details of the landscape. As the temperature is lowered the acceptance ratio decreases since the barriers between minima get larger. When this happens we are fixing in a single minimum, which should be the global minimum. At this point attempted steps far outside this minimum are not very useful so we want to lower the stepsize. Because the acceptance ratio decreases when the temperature decreases the stepsize is also decreased to compensate, effectively zooming in on the minimum.
+
+The relative steps are implemented to ensure that all parameters can converge to their optimum simultaneously, regardless of their absolute value. If we would take absolute steps and the optimal parameter set would be ${0.1,100}$ then it would be hard to converge to that parameter set, since the second large parameter would need a stepsize of around $1$ to converge while that is obviously much too big for the first small parameter. By using relative steps we can vary the parameters by a certain percentage of their current value, allowing parameters which orders of magnitude apart to still converge. Relative steps are implemented with logarithms using the following protocol:
+
+\begin{enumerate}
+\item Start with a parameter set: $\vec{P}_0$.
+\item Take the natural logarithm of this parameter set: $\vec{L}_0 = \log(\vec{P}_0)$.
+\item Vary the parameters slightly: $\vec{L}_1 = \vec{L}_0 + \vec{\delta}$.
+\item Take the exponential to transform the parameters back: $\vec{P}_1 = \exp(\vec{L}_1) = \exp(\vec{\delta})\vec{P}_0$
+\end{enumerate}
+
+The alert reader can spot from the last line that the algorithm can never cross a certain boundary when using these relative steps. Since we are effectively multiplying the current parameters it is impossible to go from a positive parameter to a negative parameter as the step will always be positive in the current implementation of the simulated annealing algorithm. One can circumvent this issue by doing two fits: one with the parameter positive and one with the parameter negative, splitting the landscape in two. We must also take care that no parameter becomes zero since it is impossible to escape from zero by only multiplying.
+
+
+\subsection{Stop condition}
+
+Since what constitutes a final, low, temperature could change between datasets and models in our implementation of simulated annealing two stop conditions are possible. One is simple user defined final temperature but the other is more complicated. The second, advanced, stop condition is based on the average energy between temperature cycles. Before lowering the temperature every temperature cycle we compute the average energy ($\chi^2$) and compare it to the average energy of the previous temperature cycle. If the relative difference between the average energies is smaller than a user defined tolerance the annealing is stopped. When the difference between the average energies is small the energy of the parameter set is almost unchanged even over many steps, therefore we can conclude it is probable we have found a minimum.
+
+
+
+
+

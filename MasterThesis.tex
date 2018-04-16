@@ -1,4 +1,4 @@
- \documentclass[11pt,a4paper,draft]{report}
+\documentclass[11pt,a4paper,draft]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
 \usepackage{amsmath}
@@ -11,6 +11,10 @@
 \usepackage{float}
 \usepackage{csvsimple}
 \usepackage{booktabs}
+
+% No figures for page count
+%\usepackage[nolists,nomarkers]{endfloat}
+%\renewcommand{\processdelayedfloats}{}
 
 % Remove Chapter heading..?
 %\usepackage{titlesec}
@@ -25,8 +29,8 @@
 
 \input{Introduction}
 \input{Chapter1-Theory}
-\input{Chapter2-2}
-\input{Chapter3-3}
+\input{Chapter2-MinimalModel}
+\input{Chapter3-SA}
 \input{Chapter4-4}
 
 \cite{PNAS}
